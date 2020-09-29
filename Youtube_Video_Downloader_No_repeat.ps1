@@ -1,4 +1,4 @@
-# Last updated 3-29-20
+# Last updated 7-21-20
 $i = 0
 $i++
 
@@ -22,11 +22,21 @@ $fileRenameOutput = "%(title)s - [$date] - [%(id)s].%(ext)s"
 # Foreach channel in index
 Foreach ($channel in $($YTIndex.opml.body.outline))
     {
+        Clear-Variable ChannelID -ErrorAction SilentlyContinue
+
         # Read the video info from the youtube channel
         [xml]$ChannelInfo = iwr -uri $($channel.xmlUrl)
 
-        # Grab the Channel ID as well from the url in the config file
-        $channelID = $ChannelInfo.feed.ChannelID
+        # If the "folderOverride" value has been set in the xml for the folder name, respect that (this was for when youtube channels change ID's to keep consistent location/directory for plex)
+        if (!$Channel.folderOverride)
+            {
+                # Grab the Channel ID as well from the url in the config file
+                $channelID = $ChannelInfo.feed.ChannelID
+            }
+        Else
+            {
+                $channelID = $Channel.folderOverride
+            }
 
         # Check to make sure each channel already has a folder in destination, if not, make it
         $pathExists = Test-Path -LiteralPath "$($MediaDir)\$($Channel.title) [$($channelID)]"
@@ -65,14 +75,14 @@ Foreach ($channel in $($YTIndex.opml.body.outline))
                                     {
                                         # set the arguments down here so that the variables expand with the right data
                                         $ARGS = @("$($video.link.href)",'-f','bestvideo[height<=1080]+bestaudio','--no-part', '--embed-subs', '--write-thumbnail', '--add-metadata', "-o", "`"$CurrentMediaDir\$fileRenameOutput`"","--cookies", "C:\Scripts\Youtube_Downloader\cookies.txt")
-                                        $StartProcessResult = Start-process -FilePath "$YT" -NoNewWindow -PassThru -wait -ArgumentList $ARGS -RedirectStandardError "$LogDirectory\ErrorLog-$((Get-Date -Format yyy-MM-ddTHH-mm-ss).tostring()).log" -RedirectStandardOutput "$LogDirectory\StandardOutput-$((Get-Date -Format yyy-MM-ddTHH-mm-ss).tostring()).log"
+                                        $StartProcessResult = Start-process -FilePath "$YT" -NoNewWindow -PassThru -wait -ArgumentList $ARGS -RedirectStandardError "$LogDirectory\ErrorOutput\ErrorLog-$((Get-Date -Format yyy-MM-ddTHH-mm-ss).tostring()).log" -RedirectStandardOutput "$LogDirectory\StandardOutput\StandardOutput-$((Get-Date -Format yyy-MM-ddTHH-mm-ss).tostring()).log"
                                     }
                             }
                         Else
                             {
                                 # set the arguments down here so that the variables expand with the right data
                                 $ARGS = @("$($video.link.href)",'-f','bestvideo[height<=1080]+bestaudio','--no-part', '--embed-subs', '--write-thumbnail', '--add-metadata', "-o", "`"$CurrentMediaDir\$fileRenameOutput`"","--cookies", "C:\Scripts\Youtube_Downloader\cookies.txt")
-                                $StartProcessResult = Start-process -FilePath "$YT" -NoNewWindow -PassThru -wait -ArgumentList $ARGS -RedirectStandardError "$LogDirectory\ErrorLog-$((Get-Date -Format yyy-MM-ddTHH-mm-ss).tostring()).log" -RedirectStandardOutput "$LogDirectory\StandardOutput-$((Get-Date -Format yyy-MM-ddTHH-mm-ss).tostring()).log"
+                                $StartProcessResult = Start-process -FilePath "$YT" -NoNewWindow -PassThru -wait -ArgumentList $ARGS -RedirectStandardError "$LogDirectory\ErrorOutput\ErrorLog-$((Get-Date -Format yyy-MM-ddTHH-mm-ss).tostring()).log" -RedirectStandardOutput "$LogDirectory\StandardOutput\StandardOutput-$((Get-Date -Format yyy-MM-ddTHH-mm-ss).tostring()).log"
                             }
 
                         # If the download and merging of the file was succesful (exit code 0), add the video id to the videoLog file.
