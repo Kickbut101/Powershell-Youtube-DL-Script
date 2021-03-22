@@ -11,5 +11,6 @@
 <outline title="Mark Rober" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCY1kMZp36IQSyNx_9h4mpCg"/>
 <outline title="Ars Technica" xmlURL="https://www.youtube.com/feeds/videos.xml?channel_id=UCCDU1fsmgvWljcW2aodfJsA"/>
 <outline title="Gourmet Makes" xmlURL="https://www.youtube.com/feeds/videos.xml?playlist_id=PLKtIunYVkv_RwB_yx1SZrZC-ddhxyXanh" folderOverride="UCCDU1fsmgvWljcW2aodfJsA"/>
+  <outline title="The American WoodShop Season 28 Playlist" xmlURL="https://www.youtube.com/feeds/videos.xml?playlist_id=PLIa_d3N5uqaJXZHA3jRF5FICMcBR9AQwV" directoryOverride="G:\Media\TV Shows\American Woodshop (2019)\Season 28" nameOverrideRegex="(?&lt;before&gt;^.+?)(?&lt;season&gt;\d{2})(?&lt;episodenumber&gt;\d{2})(?&lt;after&gt;.*)" nameOverrideRegexReplace="${before}S${season}E${episodenumber}${after}" agescopeoverride="90"/>/>
 </body>
 </opml>
